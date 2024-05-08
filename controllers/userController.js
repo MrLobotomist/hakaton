@@ -79,6 +79,7 @@ exports.getCurrentUser = async (req, res) => {
         const user = await users.findByPk(req.user.user_id, {
             attributes: ['user_id', 'username']
         });
+        console.log(user);
         if (user) {
             res.json(user);
         } else {

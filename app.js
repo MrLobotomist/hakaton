@@ -5,7 +5,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const sequelize = require('./config/database');
 const authRoutes = require('./routes/authRoutes');
-const chatRoutes = require('./routes/chatRoutes');
+const postRoutes = require('./routes/postRoutes');
 
 const app = express();
 
@@ -18,7 +18,7 @@ app.use(morgan('dev'));
 
 // Подключение маршрутов
 app.use('/api/auth', authRoutes);
-app.use('/api/post', chatRoutes);
+app.use('/api/post', postRoutes);
 
 // Главная страница
 app.get('/', (req, res) => {
