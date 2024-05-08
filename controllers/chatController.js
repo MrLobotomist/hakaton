@@ -52,3 +52,29 @@ exports.msg_in_chat_get = async (req, res) => {
         res.status(500).json({message: 'Server error'});
     }
 };
+
+exports.all_msg_in_user_chat = async (req, res) => {
+    const user = await Users.findByPk(req.user.userId, {
+        attributes: ['id', 'username']
+    });
+    // Поиск всех сообщений в указанном чате
+    const msg = await Users.findByPk(user.id, {
+        include: [
+            {
+                model: chats,
+                include: [
+                    {
+                        model: messages
+                    }
+                ]
+            }
+        ]
+        }
+    );
+    try {
+        res.status(201).json({message: 'Send messsages', body: msg});
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({message: 'Server error'});
+    }
+};

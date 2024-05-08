@@ -6,8 +6,6 @@ const morgan = require('morgan');
 const sequelize = require('./config/database');
 const authRoutes = require('./routes/authRoutes');
 const chatRoutes = require('./routes/chatRoutes');
-const swaggerUi = require('swagger-ui-express');
-const specs = require('./config/swagger')
 
 const app = express();
 
@@ -17,9 +15,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors());
 app.use(morgan('dev'));
-
-// Подключение Swagger UI
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 // Подключение маршрутов
 app.use('/api/auth', authRoutes);
