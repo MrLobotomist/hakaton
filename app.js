@@ -7,6 +7,7 @@ const sequelize = require('./config/database');
 const authRoutes = require('./routes/authRoutes');
 const postRoutes = require('./routes/postRoutes');
 const roleRoutes = require('./routes/roleRoutes');
+const messageRoutes = require('./routes/messageRoutes');
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(morgan('dev'));
 app.use('/api/auth', authRoutes);
 app.use('/api/post', postRoutes);
 app.use('/api/role', roleRoutes);
+app.use('/api/messages', messageRoutes);
 
 // Главная страница
 app.get('/', (req, res) => {
