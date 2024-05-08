@@ -31,7 +31,7 @@ module.exports = function(sequelize, DataTypes) {
     sequelize,
     tableName: 'post_messages',
     schema: 'public',
-    timestamps: true,
+    timestamps: false,
     indexes: [
       {
         name: "post_messages_pkey",

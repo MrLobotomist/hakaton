@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const sequelize = require('./config/database');
 const authRoutes = require('./routes/authRoutes');
 const postRoutes = require('./routes/postRoutes');
+const roleRoutes = require('./routes/roleRoutes');
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use(morgan('dev'));
 // Подключение маршрутов
 app.use('/api/auth', authRoutes);
 app.use('/api/post', postRoutes);
+app.use('/api/role', roleRoutes);
 
 // Главная страница
 app.get('/', (req, res) => {

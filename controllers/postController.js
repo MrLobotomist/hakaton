@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const config = require('../config/config');
 const sequelize = require('../config/database');
 const initModels = require('../models/init-models');
-const {posts, users, user_role} = initModels(sequelize);
+const { post_messages, posts, users, user_role} = initModels(sequelize);
 
 exports.GetPost = async (req, res) => {
     try {
@@ -20,6 +20,9 @@ exports.createPost = async (req, res) => {
     const user = await users.findByPk(req.user.user_id, {
         attributes: ['user_id', 'username']
     });
+    if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+    }
     const { title, content } = req.body;
     try {
         const newPost = await posts.create({ title, content, user_id: user.user_id });
