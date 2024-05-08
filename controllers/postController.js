@@ -59,3 +59,15 @@ exports.updatePost = async (req, res) => {
         res.status(500).json({ message: 'Server error' });
     }
 };
+
+exports.GetPostByID = async (req, res) => {
+    const postId = req.params.id;
+    try {
+        // Получаем все посты из базы данных
+        const post = await posts.findByPk(postId); // Используйте Post вместо posts
+        res.json(post);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};

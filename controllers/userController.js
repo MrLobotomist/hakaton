@@ -38,14 +38,13 @@ exports.login = async (req, res) => {
     try {
         const user = await users.findOne({where: {username}});
         const user_roles = await user_role.findAll({where: {user_id: user.user_id}});
-        let role_id = user_roles.role_id;
+        let role_id = user_roles[0].role_id;
         for (let i = 0; i < user_roles.length; i++) {
             const userRole = user_roles[i];
             if (role_id === null || userRole.role_id < role_id) {
                 role_id = userRole.role_id;
             }
         }
-        console.log(role_id);
 
         // Проверка пользователя
         if (!user || !(await bcrypt.compare(password, user.password))) {
@@ -53,7 +52,7 @@ exports.login = async (req, res) => {
         }
 
         // Создание JWT токена
-        const token = jwt.sign({user_id: user.user_id, role_id: 2}, config.secretKey, {
+        const token = jwt.sign({user_id: user.user_id, role_id: role_id}, config.secretKey, {
             expiresIn: '1h'
         });
 
