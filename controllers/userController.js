@@ -5,14 +5,14 @@ const config = require('../config/config');
 const sequelize = require('../config/database');
 const initModels = require('../models/init-models');
 
-const {AccessTokens,Users} = initModels(sequelize);
+const {access_tokens, users} = initModels(sequelize);
 
 // Регистрация нового пользователя
 exports.register = async (req, res) => {
     const {username, password} = req.body;
     try {
         // Проверяем, существует ли пользователь с таким именем
-        const existingUser = await Users.findOne({where: {username}});
+        const existingUser = await users.findOne({where: {username}});
         if (existingUser) {
             return res.status(400).json({message: 'Username already taken'});
         }
@@ -21,7 +21,7 @@ exports.register = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Создаем нового пользователя
-        const newUser = await Users.create({username, password: hashedPassword});
+        const newUser = await users.create({username, password: hashedPassword});
 
         res.status(201).json({message: 'User created', user: newUser});
     } catch (err) {
@@ -34,7 +34,7 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
     const {username, password} = req.body;
     try {
-        const user = await Users.findOne({where: {username}});
+        const user = await users.findOne({where: {username}});
 
         // Проверка пользователя
         if (!user || !(await bcrypt.compare(password, user.password))) {
@@ -46,11 +46,11 @@ exports.login = async (req, res) => {
             expiresIn: '1h'
         });
 
-        const tokenDB = await AccessTokens.findOne({where: {id: user.id}});
+        const tokenDB = await access_tokens.findOne({where: {user_id: user.user_id}});
 
         if(!tokenDB) {
             // Сохранение токена в базе данных
-            await AccessTokens.create({ id: user.id, token });
+            await access_tokens.create({ id: user.id, token });
         } else {
             // Если токен найден, обновляем его значение
             await tokenDB.update({ token });
@@ -66,8 +66,9 @@ exports.login = async (req, res) => {
 // Получение информации о текущем пользователе
 exports.getCurrentUser = async (req, res) => {
     try {
-        const user = await Users.findByPk(req.user.userId, {
-            attributes: ['id', 'username']
+        console.log(req.user)
+        const user = await users.findByPk(req.user, {
+            attributes: ['user_id', 'username']
         });
         if (user) {
             res.json(user);

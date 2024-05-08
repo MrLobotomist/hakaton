@@ -1,35 +1,39 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('AccessTokens', {
-    id: {
+  return sequelize.define('users', {
+    user_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true
     },
-    token: {
+    username: {
       type: DataTypes.STRING(255),
       allowNull: false,
-      unique: "AccessTokens_token_key"
+      unique: "Users_username_key"
+    },
+    password: {
+      type: DataTypes.STRING(255),
+      allowNull: false
     }
   }, {
     sequelize,
-    tableName: 'AccessTokens',
+    tableName: 'users',
     schema: 'public',
     timestamps: true,
     indexes: [
       {
-        name: "AccessTokens_pkey",
+        name: "Users_pkey",
         unique: true,
         fields: [
-          { name: "id" },
+          { name: "user_id" },
         ]
       },
       {
-        name: "AccessTokens_token_key",
+        name: "Users_username_key",
         unique: true,
         fields: [
-          { name: "token" },
+          { name: "username" },
         ]
       },
     ]
