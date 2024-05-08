@@ -5,7 +5,7 @@ const config = require('../config/config');
 const sequelize = require('../config/database');
 const initModels = require('../models/init-models');
 
-const {access_tokens, users} = initModels(sequelize);
+const {access_tokens, users, user_role} = initModels(sequelize);
 
 // Регистрация нового пользователя
 exports.register = async (req, res) => {
@@ -23,7 +23,9 @@ exports.register = async (req, res) => {
         // Создаем нового пользователя
         const newUser = await users.create({username, password: hashedPassword});
 
-        res.status(201).json({message: 'User created', user: newUser});
+        const newUserRole = await user_role.create({user_id: newUser.user_id, role_id: 2})
+
+        res.status(201).json({message: 'User created', user: newUser, roleUser: newUserRole});
     } catch (err) {
         console.error(err);
         res.status(500).json({message: 'Server error'});

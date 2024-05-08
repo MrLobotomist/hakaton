@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define('users', {
+  const User = sequelize.define('users', {
     user_id: {
       autoIncrement: true,
       type: DataTypes.INTEGER,
@@ -38,4 +38,11 @@ module.exports = function(sequelize, DataTypes) {
       },
     ]
   });
+
+  User.associate = function(models) {
+    // Определение ассоциации "многие ко многим" с моделью UserRole
+    User.belongsToMany(models.user_role, { through: 'user_role', foreignKey: 'user_id' });
+  };
+
+  return User;
 };
