@@ -10,7 +10,6 @@ const {AccessTokens,Users} = initModels(sequelize);
 // Регистрация нового пользователя
 exports.register = async (req, res) => {
     const {username, password} = req.body;
-    console.log(req.body);
     try {
         // Проверяем, существует ли пользователь с таким именем
         const existingUser = await Users.findOne({where: {username}});
