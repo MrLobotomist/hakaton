@@ -42,7 +42,7 @@ exports.login = async (req, res) => {
         }
 
         // Создание JWT токена
-        const token = jwt.sign({userId: user.id}, config.secretKey, {
+        const token = jwt.sign({user_id: user.user_id}, config.secretKey, {
             expiresIn: '1h'
         });
 
@@ -66,8 +66,7 @@ exports.login = async (req, res) => {
 // Получение информации о текущем пользователе
 exports.getCurrentUser = async (req, res) => {
     try {
-        console.log(req.user)
-        const user = await users.findByPk(req.user, {
+        const user = await users.findByPk(req.user.user_id, {
             attributes: ['user_id', 'username']
         });
         if (user) {
