@@ -40,8 +40,8 @@ module.exports = function(sequelize, DataTypes) {
   });
 
   User.associate = function(models) {
-    // Определение ассоциации "многие ко многим" с моделью UserRole
-    User.belongsToMany(models.user_role, { through: 'user_role', foreignKey: 'user_id' });
+    // Определение ассоциации "многие ко многим" с моделью Role через таблицу user_role
+    User.belongsToMany(models.roles, { through: models.user_role, foreignKey: 'user_id', otherKey: 'role_id' });
   };
 
   return User;

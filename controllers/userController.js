@@ -5,7 +5,7 @@ const config = require('../config/config');
 const sequelize = require('../config/database');
 const initModels = require('../models/init-models');
 
-const {access_tokens, users, user_role} = initModels(sequelize);
+const {access_tokens, users, roles, user_role} = initModels(sequelize);
 
 // Регистрация нового пользователя
 exports.register = async (req, res) => {
@@ -37,6 +37,15 @@ exports.login = async (req, res) => {
     const {username, password} = req.body;
     try {
         const user = await users.findOne({where: {username}});
+        const user_roles = await user_role.findAll({where: {user_id: user.user_id}});
+        let role_id = user_roles.role_id;
+        for (let i = 0; i < user_roles.length; i++) {
+            const userRole = user_roles[i];
+            if (role_id === null || userRole.role_id < role_id) {
+                role_id = userRole.role_id;
+            }
+        }
+        console.log(role_id);
 
         // Проверка пользователя
         if (!user || !(await bcrypt.compare(password, user.password))) {
@@ -44,7 +53,7 @@ exports.login = async (req, res) => {
         }
 
         // Создание JWT токена
-        const token = jwt.sign({user_id: user.user_id}, config.secretKey, {
+        const token = jwt.sign({user_id: user.user_id, role_id: 2}, config.secretKey, {
             expiresIn: '1h'
         });
 

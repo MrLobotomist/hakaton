@@ -18,7 +18,7 @@ app.use(morgan('dev'));
 
 // Подключение маршрутов
 app.use('/api/auth', authRoutes);
-app.use('/api/chat', chatRoutes);
+app.use('/api/post', chatRoutes);
 
 // Главная страница
 app.get('/', (req, res) => {
