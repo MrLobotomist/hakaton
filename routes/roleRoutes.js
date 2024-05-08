@@ -4,7 +4,7 @@ const postController = require('../controllers/roleController');
 const auth = require('../middleware/auth');
 
 
-router.post('/posts', auth, postController.setRole);
-router.delete('/posts', auth, postController.deleteRole);
+router.post('/role', auth, postController.setRole);
+router.delete('/role', auth, postController.deleteRole);
 
 module.exports = router
